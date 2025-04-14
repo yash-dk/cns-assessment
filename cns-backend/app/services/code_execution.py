@@ -18,7 +18,11 @@ class CodeExecutionService:
     """
 
     def __init__(self):
-        self.docker_client = docker.DockerClient(base_url=settings.DOCKER_HOST)
+        try:
+            self.docker_client = docker.DockerClient(base_url=settings.DOCKER_HOST)
+        except:
+            self.docker_client = docker.from_env()
+        
         self.static_dir = settings.STATIC_DIR
         Path(self.static_dir).mkdir(exist_ok=True)
 
