@@ -10,15 +10,26 @@ import { tap, switchMap, catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class NotebookService {
-  private notebooks: Notebook[] = [];
+  private notebooks: NotebookList[] = [];
   private activeNotebookSubject = new BehaviorSubject<Notebook | null>(null);
+  private notebooksChangedSubject = new BehaviorSubject<boolean>(false);
   private apiBaseUrl = environment.apiBaseUrl;
+  
   activeNotebook$ = this.activeNotebookSubject.asObservable();
+  notebooksChanged$ = this.notebooksChangedSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
   getNotebooks(): Observable<NotebookList[]> {
-    return this.http.get<NotebookList[]>(`${this.apiBaseUrl}/api/notebook`);
+    return this.http.get<NotebookList[]>(`${this.apiBaseUrl}/api/notebook`).pipe(
+      tap(notebooks => {
+        this.notebooks = notebooks;
+      })
+    );
+  }
+
+  refreshNotebooks(): void {
+    this.notebooksChangedSubject.next(true);
   }
 
   getNotebook(id: string): Observable<Notebook> {
@@ -33,7 +44,12 @@ export class NotebookService {
     return this.http.post<Notebook>(`${this.apiBaseUrl}/api/notebook`, {
       title,
       description
-    });
+    }).pipe(
+      tap(() => {
+        // Notify subscribers that notebooks have changed
+        this.refreshNotebooks();
+      })
+    );
   }
 
   deleteNotebook(id: string): Observable<void> {

@@ -63,6 +63,9 @@ export class DashboardComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.notebookService.createNotebook(result.name, result.description).subscribe({
+          next: (notebook) => {
+            this.notebookService.getNotebook(notebook.id).subscribe();
+          },
           error: (error) => {
             console.error('Failed to create notebook', error);
           }

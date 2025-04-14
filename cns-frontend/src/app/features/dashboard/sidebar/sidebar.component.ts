@@ -52,6 +52,10 @@ export class SidebarComponent implements OnInit {
         this.activeNotebookId = null;
       }
     });
+
+    this.notebookService.notebooksChanged$.subscribe(() => {
+      this.loadNotebooks();
+    });
   }
 
   loadNotebooks(): void {
