@@ -8,7 +8,6 @@ from app.utils.auth import get_current_user
 from app.models.user import User
 from app.models.notebook import Notebook
 from app.models.block import Block
-from app.services.code_execution import code_execution_service
 
 router = APIRouter()
 
@@ -63,18 +62,14 @@ async def create_block(
             status_code=status.HTTP_404_NOT_FOUND, detail="Notebook not found"
         )
 
-    result = await code_execution_service.execute_code(
-        code=block.code, language=block.language
-    )
-
     # Create the block
     db_block = Block(
         notebook_id=block.notebook_id,
         language=block.language,
         code=block.code,
-        text_output=result.get("text_output"),
-        error=result.get("error"),
-        plot_urls=result.get("plot_urls"),
+        text_output='',
+        error='',
+        plot_urls=None,
         order=block.order,
     )
 
