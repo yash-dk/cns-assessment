@@ -1,0 +1,67 @@
+<div class="dashboard-container">
+  <div class="sidebar-container">
+    <app-sidebar (notebookSelected)="onNotebookSelected($event)" (createNotebook)="onCreateNotebook()">
+    </app-sidebar>
+  </div>
+
+  <div class="content-container">
+    @if (activeNotebook) {
+    <div class="notebook-header">
+      <h1 class="notebook-title">{{ activeNotebook.name }}</h1>
+      <div class="notebook-actions">
+        <button mat-stroked-button color="primary" (click)="onAddCell('code')" matTooltip="Add code cell">
+          <mat-icon>code</mat-icon> Add Code
+        </button>
+        <button mat-stroked-button (click)="onAddCell('markdown')" matTooltip="Add markdown cell">
+          <mat-icon>notes</mat-icon> Add Markdown
+        </button>
+      </div>
+    </div>
+
+    <div class="notebook-content">
+      @if (activeNotebook.cells.length === 0) {
+      <div class="empty-notebook">
+        <p>This notebook is empty</p>
+        <div class="empty-actions">
+          <button mat-raised-button color="primary" (click)="onAddCell('code')">
+            <mat-icon>code</mat-icon> Add Code Cell
+          </button>
+          <button mat-stroked-button (click)="onAddCell('markdown')">
+            <mat-icon>notes</mat-icon> Add Markdown Cell
+          </button>
+        </div>
+      </div>
+      } @else {
+      <div class="cells-container">
+        @for (cell of activeNotebook.cells; track cell.id) {
+
+        @if (cell.language === 'markdown') {
+        <app-markdown-cell [cell]="cell" [isExpanded]="expandedCellId === cell.id"
+          [isEditing]="editingCellId === cell.id" (delete)="onDeleteCell(cell.id)"
+          (toggleExpand)="onToggleCellExpand(cell.id, $event)" (toggleEdit)="onToggleMarkdownEdit(cell.id, $event)"
+          (save)="onSaveCell(cell.id, $event)">
+        </app-markdown-cell>
+        } @else {
+        <app-code-cell [cell]="cell" [isExpanded]="expandedCellId === cell.id"
+          [isExecuting]="executingCellIds.includes(cell.id)" (execute)="onExecuteCell(cell.id)"
+          (delete)="onDeleteCell(cell.id)" (toggleExpand)="onToggleCellExpand(cell.id, $event)"
+          (save)="onSaveCell(cell.id, $event)">
+        </app-code-cell>
+        }
+        }
+      </div>
+      }
+    </div>
+    } @else {
+    <div class="no-selection">
+      <div class="welcome-message">
+        <h2>Welcome to the Notebook Dashboard</h2>
+        <p>Select a notebook from the sidebar or create a new one to get started.</p>
+        <button mat-raised-button color="primary" (click)="onCreateNotebook()">
+          Create New Notebook
+        </button>
+      </div>
+    </div>
+    }
+  </div>
+</div>

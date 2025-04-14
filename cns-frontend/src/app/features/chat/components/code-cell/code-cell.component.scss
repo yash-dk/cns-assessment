@@ -1,0 +1,91 @@
+.code-cell {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 16px;
+  border-radius: 4px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+
+  &.expanded {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    margin: 0;
+    border-radius: 0;
+    background-color: #f5f5f5;
+
+    .code-output {
+      height: 100%;
+    }
+
+    .code-error {
+      height: 100%;
+    }
+  }
+}
+
+.cell-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 8px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e0e0e0;
+
+  .cell-execute {
+    margin-bottom: 10px;
+  }
+}
+
+.cell-toolbar-start,
+.cell-toolbar-end {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  .unsaved-changes-indicator {
+    color: #ff9800;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+}
+
+.language-selector {
+  width: 150px;
+  font-size: 14px;
+}
+
+.code-editor {
+  height: 200px;
+  border-bottom: 1px solid #e0e0e0;
+
+  .code-cell.expanded & {
+    height: 45vh;
+  }
+
+  .monaco-editor{
+    height: 100% !important;
+  }
+}
+
+
+.code-error {
+  padding: 8px 16px;
+  background-color: #f8f8f8;
+  max-height: 150px;
+  overflow: auto;
+
+  pre {
+    color: red;
+    margin: 0;
+    white-space: pre-wrap;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 14px;
+  }
+}

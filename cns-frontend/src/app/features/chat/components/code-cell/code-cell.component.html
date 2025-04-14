@@ -1,0 +1,56 @@
+<div class="code-cell" [class.expanded]="isExpanded">
+  <div class="cell-toolbar">
+    <div class="cell-toolbar-start">
+      <button class="cell-execute" mat-icon-button color="primary" (click)="onExecute()" matTooltip="Run cell"
+        [disabled]="isExecuting">
+        <mat-icon *ngIf="!isExecuting">play_arrow</mat-icon>
+        <mat-progress-spinner *ngIf="isExecuting" diameter="20" mode="indeterminate"></mat-progress-spinner>
+      </button>
+
+      <mat-select class="language-selector" [value]="currentLanguage" (selectionChange)="onLanguageChange($event.value)"
+        placeholder="Language">
+        <mat-option *ngFor="let lang of availableLanguages" [value]="lang">
+          {{ lang | uppercase }}
+        </mat-option>
+      </mat-select>
+
+      <button mat-button color="primary" (click)="onSave()" matTooltip="Save changes">
+        <mat-icon>save</mat-icon> Save
+      </button>
+      
+      <button mat-button color="accent" (click)="toggleEditor()" matTooltip="Toggle editor visibility">
+        <mat-icon>{{ showEditor ? 'visibility_off' : 'visibility' }}</mat-icon>
+        {{ showEditor ? 'Hide Editor' : 'Show Editor' }}
+      </button>
+    </div>
+    <div class="cell-toolbar-end">
+      <span *ngIf="isDirty" class="unsaved-changes-indicator" matTooltip="You have unsaved changes">
+        <mat-icon>warning</mat-icon> Unsaved Changes
+      </span>
+      <button mat-icon-button (click)="onToggleExpand()" [matTooltip]="isExpanded ? 'Collapse' : 'Expand'">
+        <mat-icon>{{ isExpanded ? 'fullscreen_exit' : 'fullscreen' }}</mat-icon>
+      </button>
+      <button mat-icon-button color="warn" (click)="onDelete()" matTooltip="Delete cell">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  @if (showEditor) {
+  <div class="code-editor">
+    <ngx-monaco-editor class="monaco-editor" [options]="editorOptions" [(ngModel)]="currentCode"
+      (ngModelChange)="onCodeChange($event)">
+    </ngx-monaco-editor>
+  </div>
+  }
+
+  <app-code-output class="code-output" [textOutput]="cell.text_output || ''" [plotUrls]="cell.plot_urls || []">
+  </app-code-output>
+
+
+  @if (cell.error) {
+  <div class="code-error">
+    <pre>{{ cell.error }}</pre>
+  </div>
+  }
+</div>

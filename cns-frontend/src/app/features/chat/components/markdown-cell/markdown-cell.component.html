@@ -1,0 +1,31 @@
+<div class="markdown-cell" [class.expanded]="isExpanded">
+  <div class="cell-toolbar">
+    <div class="cell-toolbar-start">
+      <button mat-icon-button color="primary" (click)="onToggleEdit()" [matTooltip]="isEditing ? 'Preview' : 'Edit'">
+        <mat-icon>{{ isEditing ? 'visibility' : 'edit' }}</mat-icon>
+      </button>
+
+      <button *ngIf="isEditing" mat-button color="primary" (click)="onSave()" matTooltip="Save changes">
+        <mat-icon>save</mat-icon> Save
+      </button>
+    </div>
+    <div class="cell-toolbar-end">
+      <button mat-icon-button (click)="onToggleExpand()" [matTooltip]="isExpanded ? 'Collapse' : 'Expand'">
+        <mat-icon>{{ isExpanded ? 'fullscreen_exit' : 'fullscreen' }}</mat-icon>
+      </button>
+      <button mat-icon-button color="warn" (click)="onDelete()" matTooltip="Delete cell">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  @if (isEditing) {
+  <div class="markdown-editor">
+    <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="cell.code" (ngModelChange)="onUpdate($event)">
+    </ngx-monaco-editor>
+  </div>
+  } @else {
+  <div class="markdown-preview" [innerHTML]="getRenderedMarkdown()">
+  </div>
+  }
+</div>

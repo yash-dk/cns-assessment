@@ -1,0 +1,43 @@
+<div class="sidebar">
+  <div class="sidebar-header">
+    <h2 class="sidebar-title">Notebooks</h2>
+    <button mat-icon-button color="primary" (click)="onCreateNotebook()" matTooltip="Create new notebook">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+
+  <div class="sidebar-content">
+    <mat-nav-list>
+      @for (notebook of notebooks; track notebook.id) {
+      <a mat-list-item [class.active]="notebook.id === activeNotebookId" (click)="onNotebookClick(notebook.id)">
+        <mat-icon matListItemIcon>article</mat-icon>
+        <div matListItemTitle>{{ notebook.title }}</div>
+        @if (notebook.updated_at) {
+        <div matListItemSubtitle>{{ notebook.updated_at | date: 'short' }}</div>
+        } @else {
+        <div matListItemLine>{{ notebook.created_at | date:'short' }}</div>
+        }
+      </a>
+      } @empty {
+      <div class="empty-state">
+        <p>No notebooks yet</p>
+        <button mat-stroked-button color="primary" (click)="onCreateNotebook()">
+          Create your first notebook
+        </button>
+      </div>
+      }
+    </mat-nav-list>
+  </div>
+
+  <div class="sidebar-footer">
+    @if (currentUser) {
+    <div class="user-info">
+      <div class="user-name">{{ currentUser.name }}</div>
+      <div class="user-email">{{ currentUser.email }}</div>
+    </div>
+    <button mat-icon-button matTooltip="Sign out" (click)="logout()">
+      <mat-icon>exit_to_app</mat-icon>
+    </button>
+    }
+  </div>
+</div>

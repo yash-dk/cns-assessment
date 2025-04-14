@@ -1,0 +1,13 @@
+<div class="preview-cell" [class.expanded]="isExpanded">
+  <div class="preview-toolbar">
+    <div class="preview-toolbar-end">
+      <button mat-icon-button (click)="onToggleExpand()" [matTooltip]="isExpanded ? 'Collapse' : 'Expand'">
+        <mat-icon>{{ isExpanded ? 'fullscreen_exit' : 'fullscreen' }}</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="preview-content">
+    <pre>{{ content }}</pre>
+  </div>
+</div>

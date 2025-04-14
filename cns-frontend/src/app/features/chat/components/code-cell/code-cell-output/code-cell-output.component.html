@@ -1,0 +1,9 @@
+<div class="code-output">
+    <div *ngFor="let part of processedParts">
+        <ng-container [ngSwitch]="part.type">
+            <pre *ngSwitchCase="'text'">{{ part.value }}</pre>
+            <img *ngSwitchCase="'img'" [src]="part.value" alt="Plot Image" style="max-width: 100%;" />
+            <iframe *ngSwitchCase="'iframe'" [src]="part.value" width="80%" height="600" frameborder="0"></iframe>
+        </ng-container>
+    </div>
+</div>
